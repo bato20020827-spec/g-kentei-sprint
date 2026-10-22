@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>G検定 直前スプリント | Agy_Laboratory</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-light: #eff6ff;
+      --success: #10b981;
+      --success-light: #ecfdf5;
+      --error: #ef4444;
+      --error-light: #fef2f2;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.08), 0 2px 4px -2px rgba(0,0,0,0.04);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.5;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 12px;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 520px;
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-height: 580px;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      color: #fff;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-icon {
+      font-size: 24px;
+    }
+
+    .brand-title {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-subtitle {
+      font-size: 11px;
+      color: #94a3b8;
+    }
+
+    .badge-live {
+      background: rgba(37, 99, 235, 0.3);
+      border: 1px solid #3b82f6;
+      color: #93c5fd;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 9999px;
+    }
+
+    main {
+      flex: 1;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Screen Transitions */
+    .screen {
+      display: none;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    /* Start Screen */
+    .welcome-card {
+      background: var(--primary-light);
+      border: 1px solid #dbeafe;
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    .welcome-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #1e40af;
+      margin-bottom: 6px;
+    }
+
+    .welcome-text {
+      font-size: 13px;
+      color: #3b82f6;
+      line-height: 1.4;
+    }
+
+    .section-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .cat-btn {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 10px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .cat-btn:hover {
+      border-color: #93c5fd;
+      background: #f8fafc;
+    }
+
+    .cat-btn.selected {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .cat-btn.full-width {
+      grid-column: span 2;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 16px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.15s ease;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+      margin-top: auto;
+    }
+
+    .btn-primary:active {
+      transform: translateY(1px);
+    }
+
+    /* Quiz Screen */
+    .progress-bar-container {
+      width: 100%;
+      height: 6px;
+      background: var(--border);
+      border-radius: 9999px;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--primary);
+      width: 20%;
+      transition: width 0.3s ease;
+    }
+
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .quiz-counter {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .quiz-category-tag {
+      font-size: 11px;
+      background: #f1f5f9;
+      color: var(--text-muted);
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    .question-box {
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.5;
+      margin-bottom: 18px;
+      color: var(--text-main);
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .opt-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      transition: all 0.15s ease;
+      line-height: 1.4;
+    }
+
+    .opt-card:active {
+      background: #f8fafc;
+    }
+
+    .opt-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: #475569;
+      flex-shrink: 0;
+    }
+
+    .opt-card.correct {
+      border-color: var(--success);
+      background: var(--success-light);
+      color: #065f46;
+    }
+
+    .opt-card.correct .opt-num {
+      background: var(--success);
+      color: #fff;
+    }
+
+    .opt-card.wrong {
+      border-color: var(--error);
+      background: var(--error-light);
+      color: #991b1b;
+    }
+
+    .opt-card.wrong .opt-num {
+      background: var(--error);
+      color: #fff;
+    }
+
+    .opt-card.disabled {
+      pointer-events: none;
+    }
+
+    .feedback-box {
+      display: none;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--primary);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      margin-bottom: 16px;
+      animation: fadeIn 0.25s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .feedback-title {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .feedback-text {
+      font-size: 13px;
+      color: #334155;
+      line-height: 1.45;
+    }
+
+    .btn-next {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 14px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: auto;
+    }
+
+    /* Result Screen */
+    .result-header {
+      text-align: center;
+      padding: 20px 0 16px;
+    }
+
+    .score-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      border: 3px solid var(--primary);
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 12px;
+    }
+
+    .verdict-title {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .verdict-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .review-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 16px 0 20px;
+      max-height: 240px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .review-item {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      font-size: 12px;
+    }
+
+    .review-item.pass {
+      border-left: 3px solid var(--success);
+    }
+
+    .review-item.fail {
+      border-left: 3px solid var(--error);
+    }
+
+    .review-item-q {
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--text-main);
+    }
+
+    .btn-notion {
+      background: #0f172a;
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 14px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      transition: background 0.15s ease;
+    }
+
+    .btn-notion:hover {
+      background: #1e293b;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .btn-outline:hover {
+      background: #f8fafc;
+      color: var(--text-main);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1e293b;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+      z-index: 100;
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+  <header>
+    <div class="brand">
+      <div class="brand-icon">🔬</div>
+      <div>
+        <div class="brand-title">G検定 直前スプリント</div>
+        <div class="brand-subtitle">Agy_Laboratory 平日ハック便</div>
+      </div>
+    </div>
+    <div class="badge-live">2026最新</div>
+  </header>
+
+  <main>
+    <!-- SCREEN 1: START -->
+    <div id="screen-start" class="screen active">
+      <div class="welcome-card">
+        <div class="welcome-title">💡 休憩5分で回す一問一答スプリント</div>
+        <div class="welcome-text">
+          仕事の合間や移動時間にサクッと5問！<br>
+          最新シラバス（LLM・Transformer・AI法制含む）から頻出論点をランダム出題します。
+        </div>
+      </div>
+
+      <div class="section-label">出題分野を選択</div>
+      <div class="category-grid">
+        <button class="cat-btn selected full-width" data-cat="すべて">🌟 全分野からランダム（総合5問）</button>
+        <button class="cat-btn" data-cat="生成AI">🤖 生成AI / LLM</button>
+        <button class="cat-btn" data-cat="ディープラーニング">🧠 ディープラーニング</button>
+        <button class="cat-btn" data-cat="機械学習">📊 機械学習</button>
+        <button class="cat-btn" data-cat="法律・倫理・社会実装">⚖️ 法律・倫理</button>
+        <button class="cat-btn full-width" data-cat="人工知能とは">🏛️ 人工知能とは</button>
+      </div>
+
+      <button id="btn-start" class="btn-primary">
+        <span>5問スプリントを開始する</span>
+        <span>🚀</span>
+      </button>
+    </div>
+
+    <!-- SCREEN 2: QUIZ -->
+    <div id="screen-quiz" class="screen">
+      <div class="progress-bar-container">
+        <div id="progress-fill" class="progress-fill"></div>
+      </div>
+
+      <div class="quiz-header">
+        <div id="quiz-counter" class="quiz-counter">第 1 / 5 問</div>
+        <div id="quiz-cat-tag" class="quiz-category-tag">生成AI</div>
+      </div>
+
+      <div id="quiz-question" class="question-box"></div>
+
+      <div id="quiz-options" class="options-list"></div>
+
+      <div id="quiz-feedback" class="feedback-box">
+        <div id="feedback-title" class="feedback-title"></div>
+        <div id="feedback-text" class="feedback-text"></div>
+      </div>
+
+      <button id="btn-next-question" class="btn-next">
+        <span>次の問題へ</span>
+        <span>➔</span>
+      </button>
+    </div>
+
+    <!-- SCREEN 3: RESULT -->
+    <div id="screen-result" class="screen">
+      <div class="result-header">
+        <div id="score-badge" class="score-badge">4/5</div>
+        <div id="verdict-title" class="verdict-title">🎉 合格圏内！</div>
+        <div id="verdict-sub" class="verdict-sub">正解率 80% ・ 休憩時間で着実に前進</div>
+      </div>
+
+      <div class="section-label">今回の振り返り</div>
+      <div id="review-list" class="review-list"></div>
+
+      <button id="btn-save-notion" class="btn-notion">
+        <span>📝 Notion「DB_Study_G検定」に記録する</span>
+      </button>
+
+      <button id="btn-restart" class="btn-outline">
+        <span>🔄 もう一度スプリントする</span>
+      </button>
+    </div>
+  </main>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+  // State
+  let selectedCategory = 'すべて';
+  let currentQuestions = [];
+  let currentIndex = 0;
+  let currentScore = 0;
+  let sessionDetails = [];
+
+  // DOM Elements
+  const screenStart = document.getElementById('screen-start');
+  const screenQuiz = document.getElementById('screen-quiz');
+  const screenResult = document.getElementById('screen-result');
+
+  const progressFill = document.getElementById('progress-fill');
+  const quizCounter = document.getElementById('quiz-counter');
+  const quizCatTag = document.getElementById('quiz-cat-tag');
+  const quizQuestion = document.getElementById('quiz-question');
+  const quizOptions = document.getElementById('quiz-options');
+  const quizFeedback = document.getElementById('quiz-feedback');
+  const feedbackTitle = document.getElementById('feedback-title');
+  const feedbackText = document.getElementById('feedback-text');
+  const btnNextQuestion = document.getElementById('btn-next-question');
+
+  const scoreBadge = document.getElementById('score-badge');
+  const verdictTitle = document.getElementById('verdict-title');
+  const verdictSub = document.getElementById('verdict-sub');
+  const reviewList = document.getElementById('review-list');
+  const btnSaveNotion = document.getElementById('btn-save-notion');
+  const toast = document.getElementById('toast');
+
+  // Category Selection
+  document.querySelectorAll('.cat-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedCategory = btn.getAttribute('data-cat');
+    });
+  });
+
+  // Start Sprint
+  document.getElementById('btn-start').addEventListener('click', () => {
+    // GAS環境判定
+    if (typeof google !== 'undefined' && google.script && google.script.run) {
+      google.script.run
+        .withSuccessHandler(initQuizWithQuestions)
+        .withFailureHandler(err => {
+          showToast('問題の取得に失敗しました: ' + err);
+        })
+        .getQuestions(selectedCategory, 5);
+    } else {
+      // ローカル/フォールバック実行用モックデータ
+      const mockPool = getLocalFallbackQuestions(selectedCategory);
+      initQuizWithQuestions(mockPool);
+    }
+  });
+
+  function initQuizWithQuestions(questions) {
+    currentQuestions = questions;
+    currentIndex = 0;
+    currentScore = 0;
+    sessionDetails = [];
+
+    showScreen(screenQuiz);
+    renderCurrentQuestion();
+  }
+
+  function renderCurrentQuestion() {
+    const q = currentQuestions[currentIndex];
+    const total = currentQuestions.length;
+
+    // Progress & Header
+    const progressPct = ((currentIndex + 1) / total) * 100;
+    progressFill.style.width = progressPct + '%';
+    quizCounter.textContent = `第 ${currentIndex + 1} / ${total} 問`;
+    quizCatTag.textContent = q.category;
+
+    quizQuestion.textContent = q.question;
+    quizOptions.innerHTML = '';
+    quizFeedback.style.display = 'none';
+    btnNextQuestion.style.display = 'none';
+
+    // Render Options
+    q.options.forEach((optText, optIdx) => {
+      const card = document.createElement('div');
+      card.className = 'opt-card';
+      card.innerHTML = `
+        <div class="opt-num">${optIdx + 1}</div>
+        <div class="opt-text">${optText}</div>
+      `;
+      card.addEventListener('click', () => handleOptionClick(optIdx));
+      quizOptions.appendChild(card);
+    });
+  }
+
+  function handleOptionClick(selectedIndex) {
+    const q = currentQuestions[currentIndex];
+    const cards = quizOptions.querySelectorAll('.opt-card');
+    cards.forEach(c => c.classList.add('disabled'));
+
+    const isCorrect = (selectedIndex === q.correctIndex);
+    if (isCorrect) currentScore++;
+
+    // Record detail
+    sessionDetails.push({
+      question: q.question,
+      category: q.category,
+      userAnswer: q.options[selectedIndex],
+      correctAnswer: q.options[q.correctIndex],
+      isCorrect: isCorrect,
+      explanation: q.explanation
+    });
+
+    // Style cards
+    cards[q.correctIndex].classList.add('correct');
+    if (!isCorrect) {
+      cards[selectedIndex].classList.add('wrong');
+    }
+
+    // Feedback
+    quizFeedback.style.display = 'block';
+    if (isCorrect) {
+      quizFeedback.style.borderLeftColor = 'var(--success)';
+      feedbackTitle.innerHTML = '⭕ 正解！ ナイスです';
+      feedbackTitle.style.color = 'var(--success)';
+    } else {
+      quizFeedback.style.borderLeftColor = 'var(--error)';
+      feedbackTitle.innerHTML = '❌ 不正解… 要復習ポイント';
+      feedbackTitle.style.color = 'var(--error)';
+    }
+    feedbackText.textContent = q.explanation;
+
+    // Next Button
+    btnNextQuestion.style.display = 'flex';
+    if (currentIndex === currentQuestions.length - 1) {
+      btnNextQuestion.innerHTML = '<span>結果を見る</span><span>🎉</span>';
+    } else {
+      btnNextQuestion.innerHTML = '<span>次の問題へ</span><span>➔</span>';
+    }
+  }
+
+  btnNextQuestion.addEventListener('click', () => {
+    if (currentIndex < currentQuestions.length - 1) {
+      currentIndex++;
+      renderCurrentQuestion();
+    } else {
+      renderResult();
+    }
+  });
+
+  function renderResult() {
+    showScreen(screenResult);
+    const total = currentQuestions.length;
+    const percentage = Math.round((currentScore / total) * 100);
+
+    scoreBadge.textContent = `${currentScore}/${total}`;
+    
+    if (percentage >= 80) {
+      scoreBadge.style.borderColor = 'var(--success)';
+      scoreBadge.style.color = 'var(--success)';
+      scoreBadge.style.background = 'var(--success-light)';
+      verdictTitle.textContent = '🎉 合格圏内！';
+      verdictSub.textContent = `正解率 ${percentage}% ・ 本番でも十分通用する仕上がりです`;
+    } else if (percentage >= 60) {
+      scoreBadge.style.borderColor = 'var(--primary)';
+      scoreBadge.style.color = 'var(--primary)';
+      scoreBadge.style.background = 'var(--primary-light)';
+      verdictTitle.textContent = '💡 基礎固め進行中！';
+      verdictSub.textContent = `正解率 ${percentage}% ・ 間違えたポイントをサクッと確認`;
+    } else {
+      scoreBadge.style.borderColor = 'var(--error)';
+      scoreBadge.style.color = 'var(--error)';
+      scoreBadge.style.background = 'var(--error-light)';
+      verdictTitle.textContent = '⚠️ 重点復習ゾーン！';
+      verdictSub.textContent = `正解率 ${percentage}% ・ 伸び代大！解説をインプットしましょう`;
+    }
+
+    // Review List
+    reviewList.innerHTML = '';
+    sessionDetails.forEach((item, idx) => {
+      const row = document.createElement('div');
+      row.className = `review-item ${item.isCorrect ? 'pass' : 'fail'}`;
+      row.innerHTML = `
+        <div class="review-item-q">第${idx + 1}問 [${item.isCorrect ? '⭕ 正解' : '❌ 誤答'}]: ${item.question}</div>
+        <div style="color: #64748b;">正解: ${item.correctAnswer}</div>
+      `;
+      reviewList.appendChild(row);
+    });
+  }
+
+  // Save to Notion
+  btnSaveNotion.addEventListener('click', () => {
+    btnSaveNotion.disabled = true;
+    btnSaveNotion.style.opacity = '0.6';
+    btnSaveNotion.textContent = '⏳ Notionに送信中...';
+
+    const resultData = {
+      category: selectedCategory,
+      score: currentScore,
+      total: currentQuestions.length,
+      percentage: Math.round((currentScore / currentQuestions.length) * 100),
+      details: sessionDetails
+    };
+
+    if (typeof google !== 'undefined' && google.script && google.script.run) {
+      google.script.run
+        .withSuccessHandler(res => {
+          btnSaveNotion.disabled = false;
+          btnSaveNotion.style.opacity = '1';
+          btnSaveNotion.textContent = '✅ Notionに記録完了！';
+          showToast(res.message);
+        })
+        .withFailureHandler(err => {
+          btnSaveNotion.disabled = false;
+          btnSaveNotion.style.opacity = '1';
+          btnSaveNotion.textContent = '⚠️ 再試行する';
+          showToast('送信エラー: ' + err);
+        })
+        .recordToNotion(resultData);
+    } else {
+      setTimeout(() => {
+        btnSaveNotion.disabled = false;
+        btnSaveNotion.style.opacity = '1';
+        btnSaveNotion.textContent = '✅ Notionに記録完了（デモ）';
+        showToast('Notion DB_Study_G検定 に学習記録を送信しました！');
+      }, 600);
+    }
+  });
+
+  document.getElementById('btn-restart').addEventListener('click', () => {
+    showScreen(screenStart);
+  });
+
+  function showScreen(screenEl) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    screenEl.classList.add('active');
+  }
+
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 3200);
+  }
+
+  const ALL_QUESTIONS_BANK = [
+    // === 1. 人工知能とは ===
+    {
+      id: 1,
+      category: "人工知能とは",
+      question: "AIが現実世界の無限の事象の中から『今自分に関係のある事柄だけを選別することの難しさ』を指摘した問題を何と呼ぶか？",
+      options: [
+        "フレーム問題",
+        "シンボルグラウンディング問題",
+        "チューリング問題",
+        "チャットボット問題"
+      ],
+      correctIndex: 0,
+      explanation: "フレーム問題（マッカーシーとヘイズが提唱）。有限の情報処理能力を持つAIが、無限に存在する環境情報から関係ある情報だけを枠（フレーム）づけることの困難さを示します。"
+    },
+    {
+      id: 2,
+      category: "人工知能とは",
+      question: "記号（シンボル）とその記号が指し示す現実世界の意味（身体性・実体）がどのように結びつくかという問題を何と呼ぶか？",
+      options: [
+        "シンボルグラウンディング問題",
+        "ノーフリーランチ定理",
+        "モラベックのパラドックス",
+        "オッカムの剃刀"
+      ],
+      correctIndex: 0,
+      explanation: "スティーヴァン・ハルナッドが提唱したシンボルグラウンディング問題。記号論理だけを操作するAIが、現実世界の意味を真に理解できるかの問いです。"
+    },
+    {
+      id: 3,
+      category: "人工知能とは",
+      question: "人間にとっては高度なチェスや数式処理はAIにとって容易だが、人間の幼児でもできる歩行や物体認識はAIにとって極めて困難であるという逆説を何と呼ぶか？",
+      options: [
+        "モラベックのパラドックス",
+        "チューリングのパラドックス",
+        "ポランニーのパラドックス",
+        "シンプソンのパラドックス"
+      ],
+      correctIndex: 0,
+      explanation: "モラベックのパラドックス。高度な推論よりも、進化の過程で身につけた無意識の知覚や運動制御のほうがコンピュータによる再現が格段に難しい現象を指します。"
+    },
+    {
+      id: 4,
+      category: "人工知能とは",
+      question: "1980年代の第2次AIブームの中心となった、特定専門分野の知識ルールを蓄積して推論を行うシステムを何と呼ぶか？",
+      options: [
+        "エキスパートシステム",
+        "パーセプトロン",
+        "コネクショニズム",
+        "オートマトン"
+      ],
+      correctIndex: 0,
+      explanation: "エキスパートシステム（MYCINやDENDRALが有名）。専門家の「IF-THENルール」を手動入力したシステムですが、知識獲得のボトルネックによりブームは終息しました。"
+    },
+    {
+      id: 5,
+      category: "人工知能とは",
+      question: "「あらゆる問題に対して万能に優れた機械学習アルゴリズムは存在せず、問題によって向き不向きがある」ことを数学的に示した定理はどれか？",
+      options: [
+        "ノーフリーランチ定理",
+        "中心極限定理",
+        "大数の法則",
+        "ベイズの定理"
+      ],
+      correctIndex: 0,
+      explanation: "ノーフリーランチ（NFL）定理。すべての可能な問題の平均をとると、いかなる学習手法も他の手法と同等の性能しか出せないという定理です。"
+    },
+
+    // === 2. 機械学習 ===
+    {
+      id: 6,
+      category: "機械学習",
+      question: "正則化項として『重みの絶対値の和（L1ノルム）』を損失関数に加え、不要な特徴量の重みを0にしてスパース化（特徴量選択）を促す回帰手法はどれか？",
+      options: [
+        "Lasso回帰（L1正則化）",
+        "Ridge回帰（L2正則化）",
+        "ロジスティック回帰",
+        "主成分回帰"
+      ],
+      correctIndex: 0,
+      explanation: "L1正則化を用いるLasso回帰。不要な特徴量の係数を厳密に0にするため特徴選択の効果があります。重みの2乗和を加えるのはL2正則化（Ridge回帰）です。"
+    },
+    {
+      id: 7,
+      category: "機械学習",
+      question: "「実際に陽性であるデータのうち、モデルが正しく陽性と予測できた割合」を表し、病気のスクリーニングなど見落としを最小化したい場面で重視される評価指標はどれか？",
+      options: [
+        "再現率（Recall）",
+        "適合率（Precision）",
+        "正解率（Accuracy）",
+        "特異度（Specificity）"
+      ],
+      correctIndex: 0,
+      explanation: "再現率（Recall = TP / (TP + FN)）。実際陽性を見逃さない指標です。逆に「陽性と予測したうち本当に陽性だった割合」は適合率（Precision）です。"
+    },
+    {
+      id: 8,
+      category: "機械学習",
+      question: "ランダムフォレストにおいて、訓練データから復元抽出（重複を許すランダムサンプリング）して複数のサブセットを作成し、並列に多数の決定木を学習させるアンサンブル手法はどれか？",
+      options: [
+        "バギング（ブートストラップ・アグリゲーティング）",
+        "ブースティング",
+        "スタッキング",
+        "クロスバリデーション"
+      ],
+      correctIndex: 0,
+      explanation: "バギング（Bagging）。並列に独立したモデルを作って平均/多数決をとる手法で分散（バリアンス）を減らします。逐次的に誤答を重み付け学習するのはブースティングです。"
+    },
+    {
+      id: 9,
+      category: "機械学習",
+      question: "サポートベクターマシン（SVM）において、低次元では線形分離できないデータを高次元空間へ写像して線形分離を可能にする手法を何と呼ぶか？",
+      options: [
+        "カーネルトリック",
+        "ソフトマージン",
+        "次元削減",
+        "スパースモデリング"
+      ],
+      correctIndex: 0,
+      explanation: "カーネルトリック（RBFカーネルや多項式カーネル）。高次元の座標を具体的に計算することなく、内積計算だけで高次元非線形境界を引くことができます。"
+    },
+    {
+      id: 10,
+      category: "機械学習",
+      question: "クラスタリングアルゴリズムであるk-means法の性質として最も適切なものはどれか？",
+      options: [
+        "初期クラスタ中心の配置によって結果が局所最適解に陥る可能性がある",
+        "クラスタ数kをアルゴリズム自身が自動的に最適決定する",
+        "階層的にデンドログラムを構築してクラスタを可視化する",
+        "データに外れ値があっても中心点計算に一切影響を受けない"
+      ],
+      correctIndex: 0,
+      explanation: "k-meansは非階層型クラスタリングで、初期値依存性があります（改善版としてk-means++が存在）。クラスタ数kは事前に人間が指定する必要があります。"
+    },
+
+    // === 3. ディープラーニング ===
+    {
+      id: 11,
+      category: "ディープラーニング",
+      question: "Sigmoid関数に代わり深層学習の隠れ層で標準的に用いられ、入力が0以下で0、0より大きい場合にそのまま出力することで勾配消失問題を劇的に緩和した活性化関数はどれか？",
+      options: [
+        "ReLU（正規化線形関数）",
+        "Softmax関数",
+        "Tanh（双曲線正接）関数",
+        "Step関数"
+      ],
+      correctIndex: 0,
+      explanation: "ReLU（Rectified Linear Unit: max(0, x)）。正の領域で勾配が常に1となるため、層が深くなっても勾配消失を起こしにくく、計算も高速です。"
+    },
+    {
+      id: 12,
+      category: "ディープラーニング",
+      question: "畳み込みニューラルネットワーク（CNN）において、1層ごとの残差（F(x) = H(x) - x）を学習させ、入力をスキップ結合（Shortcut Connection）で直接加算することで100層以上の超深層化を実現した名作モデルはどれか？",
+      options: [
+        "ResNet",
+        "AlexNet",
+        "VGG",
+        "GoogLeNet"
+      ],
+      correctIndex: 0,
+      explanation: "ResNet（Residual Network, 2015年）。スキップ結合により勾配が直接下流へ流れるため、超深層ネットワークでも勾配消失を起こさず学習可能です。"
+    },
+    {
+      id: 13,
+      category: "ディープラーニング",
+      question: "学習中の各ミニバッチごとに、隠れ層の出力を平均0・分散1に正規化した上でスケーリング・シフトを行うことで、学習の高速化・初期値依存の軽減・過学習抑制を同時に実現する手法はどれか？",
+      options: [
+        "バッチ正規化（Batch Normalization）",
+        "ドロップアウト",
+        "データ拡張（Data Augmentation）",
+        "勾配クリッピング"
+      ],
+      correctIndex: 0,
+      explanation: "バッチ正規化（Ioffe & Szegedy, 2015）。内部共変量シフトを抑え、高い学習率を設定できるようになり学習が大幅に安定・高速化します。"
+    },
+    {
+      id: 14,
+      category: "ディープラーニング",
+      question: "勾配の過去の履歴を指数移動平均で捉える「モメンタム」と、勾配の二乗和で学習率を要素ごとに適応調整する「RMSprop」を組み合わせた、最も広く使われるオプティマイザはどれか？",
+      options: [
+        "Adam",
+        "SGD",
+        "AdaGrad",
+        "Momentum SGD"
+      ],
+      correctIndex: 0,
+      explanation: "Adam（Adaptive Moment Estimation）。1次モーメント（方向/勢い）と2次モーメント（ステップ幅の調整）を両方組み込み、ハイパーパラメータの既定値でも極めて安定して動作します。"
+    },
+    {
+      id: 15,
+      category: "ディープラーニング",
+      question: "従来の再帰型ニューラルネットワーク（RNN）が抱えていた長期記憶の喪失（長期依存性の学習困難）を解決するため、忘却ゲート・入力ゲート・出力ゲートを備えたモデルはどれか？",
+      options: [
+        "LSTM（Long Short-Term Memory）",
+        "オートエンコーダ",
+        "エルマンネット",
+        "ボルツマンマシン"
+      ],
+      correctIndex: 0,
+      explanation: "LSTM（Hochreiter & Schmidhuber, 1997）。セル状態（CEC）と3つのゲートによって情報を何ステップも保持・更新でき、長期依存性を学習できます。"
+    },
+
+    // === 4. 生成AI ===
+    {
+      id: 16,
+      category: "生成AI",
+      question: "Transformerの根幹技術であり、入力文中の全トークン間の関連度（内積）を行列計算して重み付けし、文脈に応じた表現を並列に獲得する機構を何と呼ぶか？",
+      options: [
+        "Self-Attention（自己注意機構）",
+        "畳み込み（Convolution）",
+        "プーリング（Pooling）",
+        "逆伝播（Backpropagation）"
+      ],
+      correctIndex: 0,
+      explanation: "Self-Attention機構（Attention Is All You Need, 2017）。Query, Key, Valueの行列積を用いて、系列内のすべての単語ペアの関係性をRNNのような再帰を使わずに並列計算します。"
+    },
+    {
+      id: 17,
+      category: "生成AI",
+      question: "大規模言語モデル（LLM）の全重みを再学習する代わりに、モデルの重み行列に低ランクの分解行列（AとB）を追加してそこだけを学習させる高効率なファインチューニング手法はどれか？",
+      options: [
+        "LoRA（Low-Rank Adaptation）",
+        "全パラメータ・ファインチューニング",
+        "ゼロショット学習",
+        "蒸留（Knowledge Distillation）"
+      ],
+      correctIndex: 0,
+      explanation: "LoRA（PEFTの一種）。元の重み W を凍結し、ΔW = B × A（低ランク）のみを学習させることで、メモリ使用量と学習パラメータ数を1/10000近くまで削減できます。"
+    },
+    {
+      id: 18,
+      category: "生成AI",
+      question: "LLMのハルシネーション（事実無根の出力）を抑制し、社内文書や最新ニュースなどの外部知識ベースをベクトル検索してプロンプトに動的注入して回答させるアーキテクチャはどれか？",
+      options: [
+        "RAG（Retrieval-Augmented Generation: 検索拡張生成）",
+        "RLHF（人間のフィードバックによる強化学習）",
+        "DPO（直接選好最適化）",
+        "Few-shotプロンプティング"
+      ],
+      correctIndex: 0,
+      explanation: "RAG（検索拡張生成）。モデルを再学習することなく、最新・固有のデータベースから検索した正確な根拠文書をコンテキストとしてモデルに渡すことでハルシネーションを防ぎます。"
+    },
+    {
+      id: 19,
+      category: "生成AI",
+      question: "「ステップ・バイ・ステップで順を追って論理的に考えてください」のように、推論の思考プロセスを出力させることで複雑な計算や論理パズルの正答率を飛躍的に高める手法を何と呼ぶか？",
+      options: [
+        "CoT（Chain-of-Thought: 思考の連鎖）",
+        "Zero-shotプロンプティング",
+        "自己整合性（Self-Consistency）",
+        "ネガティブプロンプティング"
+      ],
+      correctIndex: 0,
+      explanation: "CoT（思考の連鎖）。最終的な答えだけを即座に出力させるのではなく、途中の推論ステップを段階的に言語化させることでLLMの推論能力を引き出す手法です。"
+    },
+    {
+      id: 20,
+      category: "生成AI",
+      question: "自然言語のテキストと画像を同一の共通ベクトル空間に埋め込み、両者の類似度（コサイン類似度）を対照学習によって最大化させたマルチモーダル基盤モデルはどれか？",
+      options: [
+        "CLIP（Contrastive Language-Image Pre-training）",
+        "BERT",
+        "ResNet-50",
+        "Word2Vec"
+      ],
+      correctIndex: 0,
+      explanation: "OpenAIが開発したCLIP。画像エンコーダとテキストエンコーダを対照学習させ、ゼロショット画像分類や画像生成モデル（Stable Diffusion等）のテキスト条件付けの基盤となっています。"
+    },
+
+    // === 5. 法律・倫理・社会実装 ===
+    {
+      id: 21,
+      category: "法律・倫理・社会実装",
+      question: "日本の著作権法第30条の4における「AI機械学習のための著作物利用」に関する規定として最も適切なものはどれか？",
+      options: [
+        "著作物に表現された思想・感情を享受することを目的としない場合、営利・非営利を問わず原則として許諾なく利用できる",
+        "学術研究目的に限って利用が認められ、商用サービスの学習には一切利用できない",
+        "事前に著作権者の許諾を得るか、公的な補償金を支払わなければ学習利用できない",
+        "テキストデータのみ許諾不要であり、画像や音楽データの学習はすべて著作権侵害となる"
+      ],
+      correctIndex: 0,
+      explanation: "著作権法第30条の4。情報解析などの「著作物に表現された思想・感情の享受を目的としない利用」については、著作権者の利益を不当に害する場合を除き、営利目的であっても許諾なく利用可能です。"
+    },
+    {
+      id: 22,
+      category: "法律・倫理・社会実装",
+      question: "欧州連合（EU）の「AI法（EU AI Act）」が採用している規制アプローチとして最も適切なものはどれか？",
+      options: [
+        "AIシステムの危険度に応じる「リスクベースアプローチ（容認不可・高リスク・限定的リスク・最小リスク）」",
+        "すべてのAIモデルを一律に全面禁止する包括的禁止アプローチ",
+        "オープンソースのAIのみを厳格に規制し、商用AIは自主規制に委ねるアプローチ",
+        "モデルのパラメータ数のみを基準としてハードウェアを物理制限するアプローチ"
+      ],
+      correctIndex: 0,
+      explanation: "EU AI Actはリスクベースアプローチを採用。社会的スコアリングや無差別な生体認証など「容認できないリスク」は全面禁止、医療や重要インフラ等「高リスク」には厳格な適合義務を課します。"
+    },
+    {
+      id: 23,
+      category: "法律・倫理・社会実装",
+      question: "複雑なブラックボックスモデル（深層学習など）の個々の予測結果に対して、ゲーム理論のシャープレイ値に基づいて各特徴量が予測にどの程度寄与したかを定量的に説明する手法はどれか？",
+      options: [
+        "SHAP（SHapley Additive exPlanations）",
+        "LIME",
+        "Grad-CAM",
+        "t-SNE"
+      ],
+      correctIndex: 0,
+      explanation: "SHAP。協力ゲーム理論のシャープレイ値（Shapley value）を応用し、特徴量の貢献度を公平かつ加法的に分配して説明性（XAI）を提供する手法です。"
+    },
+    {
+      id: 24,
+      category: "法律・倫理・社会実装",
+      question: "AIモデルが特定の性別や人種、年齢に対して不当に不利な予測を下す「AIバイアス」の主な原因として、最も根本的なものはどれか？",
+      options: [
+        "訓練データ自体に歴史的・社会的な偏りやサンプリングの不均衡が含まれていること",
+        "プログラミング言語のコンパイラに文法的な欠陥が存在すること",
+        "GPUの浮動小数点演算における丸め誤差の蓄積",
+        "インターネット回線の通信レイテンシー"
+      ],
+      correctIndex: 0,
+      explanation: "AIバイアスの主因は訓練データの偏り（歴史的バイアス、表現の偏り、ラベル付けバイアス等）です。AIは過去のデータからパターンを学ぶため、データ中の差別や偏見をそのまま学習・増幅してしまいます。"
+    },
+    {
+      id: 25,
+      category: "法律・倫理・社会実装",
+      question: "日本の個人情報保護法において、「他の情報と照合しない限り特定の個人を識別することができないように加工した個人に関する情報」を何と呼ぶか？",
+      options: [
+        "仮名加工情報",
+        "匿名加工情報",
+        "要配慮個人情報",
+        "オープンデータ"
+      ],
+      correctIndex: 0,
+      explanation: "仮名加工情報。内部分析やAI研究開発の促進を目的に2020年改正法で新設されました。完全に復元できないよう加工した「匿名加工情報」とは異なり、第三者提供は原則禁止されています。"
+    }
+  ];
+
+  function getLocalFallbackQuestions(category, count = 5) {
+    let pool = ALL_QUESTIONS_BANK;
+    if (category && category !== 'すべて') {
+      pool = ALL_QUESTIONS_BANK.filter(q => q.category === category);
+    }
+    const shuffled = [...pool];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled.slice(0, count);
+  }
+</script>
+
+</body>
+</html>
